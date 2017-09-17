@@ -8,13 +8,15 @@ entity avr_core is
 	port(
 		reset_n : in std_logic;
 		clock : in std_logic;
+		out_addr_bus : out std_logic_vector(15 downto 0);
 		inout_data_bus : inout std_logic_vector(7 downto 0);
 	);
 end avr_core;
 
 architecture logic of avr_core is
 	type regarray is array (0 to 31) of (std_logic_vector(7 downto 0)); --
---	type instructs is array (add,adc,adiw,sub,subi,sbc,sbci,sbiw,_and,andi,_or,ori,eor,com,neg,sbr,cbr,inc,dec,tst,clr,ser,mul,
+	type exec_c is array (0 to 3) of (integer range 0 to 3);
+	--	type instructs is array (add,adc,adiw,sub,subi,sbc,sbci,sbiw,_and,andi,_or,ori,eor,com,neg,sbr,cbr,inc,dec,tst,clr,ser,mul,
 	--									rjmp,ijmp,rcall,call,ret,reti,cpse,cp,cpc,cpi,sbrc,sbrs,sbic,sbis,brbs,brbc,breq,brne,brcs,brcc,brsh,brlo,brmi,brpl,brge,brlt,brhs,brhc,brts,brtc,brvs,brvc,brie,brid,
 	--									mov,ldi,lds,ld,ldd,sts,st,_std,lpm,_in,_out,push,pop,
 		--								lsl,lsr,_rol,_ror,asr,swap,bset,bclr,sbi,cbi,bst,bld,sec,clc,sen,cln,sez,clz,sei,cli,ses,cls,sev,clv,set,clt,seh,clh,nop,sleep,wdr);
@@ -28,6 +30,8 @@ architecture logic of avr_core is
 	signal src_reg  : std_logic_vector(7 downto 0);
 	signal dest_reg : std_logic_vector(15 downto 0);
 	signal insts : std_logic_vector(15 downto 0);
+	signal exec_counter : exec_c;
+	signal pipeline_counter : integer range 0 to 3;
 	component multiply is
 		PORT
 		(
@@ -57,6 +61,7 @@ begin
 			else
 				case insts
 					when "000011----------"	=> --add
+						
 						dest_reg(7 downto 0) <= regs(to_integer(unsigned(insts(8 downto 4))));
 						src_reg <= regs(to_integer(unsigned(insts(9) & insts(3 downto 0))));
 						
@@ -66,10 +71,10 @@ begin
 						dest_reg(15 downto 8) <= regs(to_integer(unsigned(24+unsigned(insts(5 downto 4) & '1'))));
 						immidiate <= insts(7 downto 6) & insts(3 downto 0);
 						
-						 <= std_logic_vector(unsigned(dest_reg) + to_integer(unsigned(immidiate)));
+						reg_16buf <= std_logic_vector(unsigned(dest_reg) + to_integer(unsigned(immidiate)));
 						
-						regs(to_integer(unsigned(dest) + 1)) <= reg_16buf(15 downto 8);
-						regs(to_integer(unsigned(dest))) <= reg_16buf(7 downto 0);	
+						regs(to_integer(unsigned(24+unsigned(insts(5 downto 4) & '1')))) <= reg_16buf(15 downto 8);
+						regs(to_integer(unsigned(24+unsigned(insts(5 downto 4) & '0')))) <= reg_16buf(7 downto 0);	
 					when "000110----------" =>--sub
 						dest_reg(7 downto 0) <= regs(to_integer(unsigned(dest)));
 						src_reg <= regs(to_integer(unsigned(insts(9) & insts(3 downto 0))));
@@ -84,7 +89,6 @@ begin
 						pc <= std_logic_vector((signed(pc) + to_integer(signed(insts(11 downto 0)))) + 1);
 					when "0000000000000000" =>  --nop
 						null;
-					end case;
 				end case;
 			end if;
 		end if;
