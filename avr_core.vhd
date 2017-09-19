@@ -93,19 +93,19 @@ begin
 					pc <= pc + 1;
 				end if;
 				insts(0) <= inst_mem_out_1 & inst_mem_out_0;
-				for j in 0 to 14 loop
+				for j in 0 to 2 loop
 					insts(j+1) <= insts(j);
 				end loop;
-				for i in 0 to 15 loop
+				for i in 0 to 3 loop
 					case insts(i) is
-						when "000011----------"	=> --add
+						when "000011XXXXXXXXXX"	=> --add
 							reg_inst(i) <= add;
 							dest_reg(i)(7 downto 0) <= regs(to_integer(unsigned(insts(i)(8 downto 4))));
 							src_reg(i) <= regs(to_integer(unsigned(insts(i)(9) & insts(i)(3 downto 0))));
 							tmp0(i) <= std_logic_vector(unsigned(dest_reg(i)(7 downto 0)) + to_integer(unsigned(src_reg(i))));
 							tmp1(i) <= tmp0(i);
 							regs(to_integer(unsigned(insts(i)(8 downto 4)))) <= tmp1(i);
-						when "10010110--------" => --adiw
+						when "10010110XXXXXXXX" => --adiw
 							reg_inst(i) <= adiw;
 							dest_reg(i)(7 downto 0) <= regs(to_integer(unsigned(24+unsigned(insts(i)(5 downto 4) & '0'))));
 							dest_reg(i)(15 downto 8) <= regs(to_integer(unsigned(24+unsigned(insts(i)(5 downto 4) & '1'))));
@@ -114,38 +114,38 @@ begin
 							tmp2(i) <= tmp1(i);
 							regs(to_integer(unsigned(24+unsigned(insts(i)(5 downto 4) & '1')))) <= tmp2(i)(15 downto 8);
 							regs(to_integer(unsigned(24+unsigned(insts(i)(5 downto 4) & '0')))) <= tmp2(i)(7 downto 0);	
-						when "000110----------" =>--sub
+						when "000110XXXXXXXXXX" =>--sub
 							reg_inst(i) <= sub;
 							dest_reg(i)(7 downto 0) <= regs(to_integer(unsigned(insts(i)(8 downto 4))));
 							src_reg(i) <= regs(to_integer(unsigned(insts(i)(9) & insts(i)(3 downto 0))));
 							tmp1(i) <= std_logic_vector(unsigned(dest_reg(i)(7 downto 0)) - to_integer(unsigned(src_reg(i))));
 							tmp2(i) <= tmp1(i);
 							regs(to_integer(unsigned(insts(i)(8 downto 4)))) <= tmp2(i); 
-						when "1001010-----0000" => --com
+						when "1001010XXXXX0000" => --com
 							reg_inst(i) <= com;
 							tmp0(i)(7 downto 0) <= regs(to_integer(unsigned(insts(i)(8 downto 4))));
 							tmp1(i) <= tmp0(i);
 							tmp2(i) <= tmp1(i);
 							regs(to_integer(unsigned(insts(i)(8 downto 4)))) <= std_logic_vector(X"FF" - unsigned(tmp2(i)(7 downto 0)));
-						when "100111----------" => --mul
+						when "100111XXXXXXXXXX" => --mul
 							reg_inst(i) <= mul;
 							mult_out <= (others => '0');
 							multa <= regs(to_integer(unsigned(insts(i)(8 downto 4))));
 							multb <= regs(to_integer(unsigned(insts(i)(9) & insts(i)(3 downto 0))));
 							regs(1) <= mult_out(15 downto 8);
 							regs(0) <= mult_out(7 downto 0);
-						when "1110------------" => --ldi
+						when "1110XXXXXXXXXXXX" => --ldi
 							reg_inst(i) <= ldi;
 							tmp0(i) <= insts(i)(11 downto 8) & insts(i)(3 downto 0);
 							tmp1(i) <= tmp0(i);
 							tmp2(i) <= tmp1(i);
 							regs(to_integer(unsigned(insts(i)(7 downto 4)) + 16)) <= tmp2(i);
-						when "1100------------" => --rjmp
+						when "1100XXXXXXXXXXXX" => --rjmp
 							reg_inst(i) <= rjmp;
 							tmp0(i) <= std_logic_vector(pc + signed(insts(i)(11 downto 0)));
 							tmp1(i) <= tmp0(i);
 							tmp2(i) <= tmp1(i);
-							pc <= to_integer(unsigned(tmp2(i)));
+							pc <= to_integer(signed(tmp2(i)));
 						when "0000000000000000" =>  --nop
 							reg_inst(i) <= nop;
 							tmp1(i) <= tmp0(i);
