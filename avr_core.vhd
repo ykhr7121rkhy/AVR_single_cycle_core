@@ -87,6 +87,9 @@ begin
 		if rising_edge(clock) then
 			if(reset_n = '0') then
 				pc <= 0;
+				for i in 0 to 3 loop
+					insts(i) <= (others => '0');
+				end loop;
 				insts(0) <= inst_mem_out_1 & inst_mem_out_0;
 				counter(0) <= 0;
 				counter(1) <= 3;
@@ -244,10 +247,10 @@ begin
 							null;
 					end if;
 					if counter(i) = 3 then
-						insts(0) <= inst_mem_out_1 & inst_mem_out_0;
-						for j in 0 to 2 loop
-							insts(j+1) <= insts(j);
-						end loop;
+						insts(i) <= inst_mem_out_1 & inst_mem_out_0;
+					--	for j in 0 to 2 loop
+						--	insts(j+1) <= insts(j);
+					--	end loop;
 					end if;
 				end loop;
 			end if;
