@@ -22,10 +22,11 @@ architecture logic of avr_core is
 	type inst_array is array(0 to 15) of instructs;
 	type reg_8bit_array is array (0 to 15) of std_logic_vector(7 downto 0);
 	type reg_16bit_array is array (0 to 15) of std_logic_vector(15 downto 0);
+	type c_array is array (0 to 15) of integer range 0 to 15;
 	signal regs : regarray;
 	signal immidiate : reg_8bit_array;
 	signal reg_16buf : reg_16bit_array;
-	signal pc : integer range 0 to 65535;
+	signal pc : integer range -32768	to 32767;
 	signal pc_branch : std_logic;
 	signal SREG : std_logic_vector(7 downto 0);
 	signal mult_out : std_logic_vector(15 downto 0);
@@ -35,7 +36,7 @@ architecture logic of avr_core is
 	signal insts : reg_16bit_array;
 	signal reg_inst : inst_array;
 	signal pipeline_counter : integer range 0 to 3;
-	signal counter : integer range 0 to 15;
+	signal counter : c_array;
 	signal tmp0,tmp1,tmp2,tmp3,tmp4 : reg_16bit_array;
 	signal inst_mem_addr_0,inst_mem_addr_1 : std_logic_vector(8 downto 0);
 	signal inst_mem_out_0,inst_mem_out_1 : std_logic_vector(7 downto 0);
@@ -87,74 +88,158 @@ begin
 			if(reset_n = '0') then
 				pc <= 0;
 			else
-				if(pc >= 65535) then
+				if(pc >= 32767) then
 					pc <= 0;
-				else
-					pc <= pc + 1;
 				end if;
 				insts(0) <= inst_mem_out_1 & inst_mem_out_0;
 				for j in 0 to 2 loop
 					insts(j+1) <= insts(j);
 				end loop;
 				for i in 0 to 3 loop
-					case insts(i) is
-						when "000011XXXXXXXXXX"	=> --add
+					if(insts(i)(15 downto 10) = "000011")	then--add
+						case counter(i) is
+						when 0 =>
 							reg_inst(i) <= add;
 							dest_reg(i)(7 downto 0) <= regs(to_integer(unsigned(insts(i)(8 downto 4))));
 							src_reg(i) <= regs(to_integer(unsigned(insts(i)(9) & insts(i)(3 downto 0))));
-							tmp0(i) <= std_logic_vector(unsigned(dest_reg(i)(7 downto 0)) + to_integer(unsigned(src_reg(i))));
-							tmp1(i) <= tmp0(i);
-							regs(to_integer(unsigned(insts(i)(8 downto 4)))) <= tmp1(i);
-						when "10010110XXXXXXXX" => --adiw
+							counter(i) <= counter(i) + 1;
+						when 1 => 
+							counter(i) <= counter(i) + 1;
+						when 2 => 
+							counter(i) <= counter(i) + 1;
+						when 3 =>
+							regs(to_integer(unsigned(insts(i)(8 downto 4)))) <= std_logic_vector(unsigned(dest_reg(i)(7 downto 0)) + to_integer(unsigned(src_reg(i))));
+							pc = pc + 1;
+							counter(i) <= 0;
+						when others =>
+							counter(i) <= 0;
+						end case;
+					elsif (insts(i)(15 downto 8) = "10010110") then--adiw
+						case counter(i) is
+						when 0 =>
 							reg_inst(i) <= adiw;
 							dest_reg(i)(7 downto 0) <= regs(to_integer(unsigned(24+unsigned(insts(i)(5 downto 4) & '0'))));
 							dest_reg(i)(15 downto 8) <= regs(to_integer(unsigned(24+unsigned(insts(i)(5 downto 4) & '1'))));
 							immidiate(i) <= insts(i)(7 downto 6) & insts(i)(3 downto 0);
-							tmp1(i) <= std_logic_vector(unsigned(dest_reg(i)) + to_integer(unsigned(immidiate(i))));
-							tmp2(i) <= tmp1(i);
-							regs(to_integer(unsigned(24+unsigned(insts(i)(5 downto 4) & '1')))) <= tmp2(i)(15 downto 8);
-							regs(to_integer(unsigned(24+unsigned(insts(i)(5 downto 4) & '0')))) <= tmp2(i)(7 downto 0);	
-						when "000110XXXXXXXXXX" =>--sub
+							counter(i) <= counter(i) + 1;
+						when 1 =>
+							reg_16buf(i)<= std_logic_vector(unsigned(dest_reg(i)) + to_integer(unsigned(immidiate(i))));
+							counter(i) <= counter(i) + 1;
+						when 2 => 
+							counter(i) <= counter(i) + 1;
+						when 3 =>
+							regs(to_integer(unsigned(24+unsigned(insts(i)(5 downto 4) & '1')))) <= reg_16buf(i)(15 downto 8);
+							regs(to_integer(unsigned(24+unsigned(insts(i)(5 downto 4) & '0')))) <= reg_16buf(i)(7 downto 0);
+							pc = pc + 1;
+							counter(i) <= 0;
+						when others =>
+							counter(i) <= 0;
+						end case;		
+					elsif (insts(i)(15 downto 10) = "000110") then --sub
+						case counter(i) is
+						when 0 =>
 							reg_inst(i) <= sub;
 							dest_reg(i)(7 downto 0) <= regs(to_integer(unsigned(insts(i)(8 downto 4))));
 							src_reg(i) <= regs(to_integer(unsigned(insts(i)(9) & insts(i)(3 downto 0))));
-							tmp1(i) <= std_logic_vector(unsigned(dest_reg(i)(7 downto 0)) - to_integer(unsigned(src_reg(i))));
-							tmp2(i) <= tmp1(i);
-							regs(to_integer(unsigned(insts(i)(8 downto 4)))) <= tmp2(i); 
-						when "1001010XXXXX0000" => --com
-							reg_inst(i) <= com;
-							tmp0(i)(7 downto 0) <= regs(to_integer(unsigned(insts(i)(8 downto 4))));
-							tmp1(i) <= tmp0(i);
-							tmp2(i) <= tmp1(i);
-							regs(to_integer(unsigned(insts(i)(8 downto 4)))) <= std_logic_vector(X"FF" - unsigned(tmp2(i)(7 downto 0)));
-						when "100111XXXXXXXXXX" => --mul
+							counter(i) <= counter(i) + 1;
+						when 1 =>
+							counter(i) <= counter(i) + 1;
+						when 2 => 
+							counter(i) <= counter(i) + 1;
+						when 3 =>
+							regs(to_integer(unsigned(insts(i)(8 downto 4)))) <= std_logic_vector(unsigned(dest_reg(i)(7 downto 0)) - to_integer(unsigned(src_reg(i))));
+							pc = pc + 1;
+							counter(i) <= 0;
+						when others =>
+							counter(i) <= 0;
+						end case; 
+					elsif (insts(i)(15 downto 9) = "1001010" and insts(i)(3 downto 0) = "0000") then	--com
+						case counter(i) is
+						when 0 =>
+							reg_inst(i) <= com;						
+							counter(i) <= counter(i) + 1;
+						when 1 =>
+							counter(i) <= counter(i) + 1;
+						when 2 => 
+							counter(i) <= counter(i) + 1;
+						when 3 =>
+							regs(to_integer(unsigned(insts(i)(8 downto 4)))) <= std_logic_vector(X"FF" - unsigned(regs(to_integer(unsigned(insts(i)(8 downto 4))))));
+							pc = pc + 1;
+							counter(i) <= 0;
+						when others =>
+							counter(i) <= 0;
+						end case; 					 
+							
+					elsif(insts(i)(15 downto 10) = "100111" ) then --mul
+						case counter(i) is
+						when 0 =>
 							reg_inst(i) <= mul;
-							mult_out <= (others => '0');
 							multa <= regs(to_integer(unsigned(insts(i)(8 downto 4))));
 							multb <= regs(to_integer(unsigned(insts(i)(9) & insts(i)(3 downto 0))));
+							counter(i) <= counter(i) + 1;
+						when 1 =>
+							counter(i) <= counter(i) + 1;
+						when 2 => 
+							counter(i) <= counter(i) + 1;
+						when 3 =>
 							regs(1) <= mult_out(15 downto 8);
 							regs(0) <= mult_out(7 downto 0);
-						when "1110XXXXXXXXXXXX" => --ldi
-							reg_inst(i) <= ldi;
-							tmp0(i) <= insts(i)(11 downto 8) & insts(i)(3 downto 0);
-							tmp1(i) <= tmp0(i);
-							tmp2(i) <= tmp1(i);
-							regs(to_integer(unsigned(insts(i)(7 downto 4)) + 16)) <= tmp2(i);
-						when "1100XXXXXXXXXXXX" => --rjmp
-							reg_inst(i) <= rjmp;
-							tmp0(i) <= std_logic_vector(pc + signed(insts(i)(11 downto 0)));
-							tmp1(i) <= tmp0(i);
-							tmp2(i) <= tmp1(i);
-							pc <= to_integer(signed(tmp2(i)));
-						when "0000000000000000" =>  --nop
-							reg_inst(i) <= nop;
-							tmp1(i) <= tmp0(i);
-							tmp2(i) <= tmp1(i);
-							tmp3(i) <= tmp2(i);
-							tmp4(i) <= tmp3(i);
+							pc = pc + 1;
+							counter(i) <= 0;
 						when others =>
+							counter(i) <= 0;
+						end case;
+					elsif(insts(i)(15 downto 12) = "1110") then --ldi
+						case counter(i) is
+						when 0 =>
+							reg_inst(i) <= ldi;
+							counter(i) <= counter(i) + 1;
+						when 1 =>
+							counter(i) <= counter(i) + 1;
+						when 2 => 
+							counter(i) <= counter(i) + 1;
+						when 3 =>
+							regs(to_integer(unsigned(insts(i)(7 downto 4)) + 16)) <= insts(i)(11 downto 8) & insts(i)(3 downto 0);
+							pc = pc + 1;
+							counter(i) <= 0;
+						when others =>
+							counter(i) <= 0;
+						end case;
+					elsif(insts(i)(15 downto 12) = "1100") then --rjmp
+						case counter(i) is
+						when 0 =>
+							reg_inst(i) <= rjmp;
+							counter(i) <= counter(i) + 1;
+						when 1 =>
+							counter(i) <= counter(i) + 1;
+						when 2 => 
+							counter(i) <= counter(i) + 1;
+						when 3 =>
+							pc <= std_logic_vector(pc + signed(((insts(i)(11) & insts(i)(11)) & (insts(i)(11) & insts(i)(11)) & insts(i)(11 downto 0))));
+							counter(i) <= 0;
+						when others =>
+							counter(i) <= 0;
+						end case;
+							
+							
+					elsif(insts(i) = "0000000000000000") then  --nop
+						case counter(i) is
+						when 0 =>
+							reg_inst(i) <= nop;
+							counter(i) <= counter(i) + 1;
+						when 1 =>
+							counter(i) <= counter(i) + 1;
+						when 2 => 
+							counter(i) <= counter(i) + 1;
+						when 3 =>
+							pc = pc + 1;
+							counter(i) <= 0;
+						when others =>
+							counter(i) <= 0;
+						end case;
+					else
 							null;
-					end case;
+					end if;
 				end loop;
 			end if;
 		end if;
