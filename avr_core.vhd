@@ -19,10 +19,10 @@ architecture logic of avr_core is
 									rjmp,ijmp,rcall,call,ret,reti,cpse,cp,cpc,cpi,sbrc,sbrs,sbic,sbis,brbs,brbc,breq,brne,brcs,brcc,brsh,brlo,brmi,brpl,brge,brlt,brhs,brhc,brts,brtc,brvs,brvc,brie,brid,
 									mov,ldi,lds,ld,ldd,sts,st,std0,lpm,in0,out0,push,pop,
 									lsl,lsr,rol0,ror0,asr,swap,bset,bclr,sbi,cbi,bst,bld,sec,clc,sen,cln,sez,clz,sei,cli,ses,cls,sev,clv,set,clt,seh,clh,nop,sleep,wdr);
-	type inst_array is array(0 to 15) of instructs;
-	type reg_8bit_array is array (0 to 15) of std_logic_vector(7 downto 0);
-	type reg_16bit_array is array (0 to 15) of std_logic_vector(15 downto 0);
-	type c_array is array (0 to 15) of integer range 0 to 15;
+	type inst_array is array(0 to 3) of instructs;
+	type reg_8bit_array is array (0 to 3) of std_logic_vector(7 downto 0);
+	type reg_16bit_array is array (0 to 3) of std_logic_vector(15 downto 0);
+	type c_array is array (0 to 3) of integer range 0 to 15;
 	signal regs : regarray;
 	signal immidiate : reg_8bit_array;
 	signal reg_16buf : reg_16bit_array;
@@ -87,14 +87,16 @@ begin
 		if rising_edge(clock) then
 			if(reset_n = '0') then
 				pc <= 0;
+				insts(0) <= inst_mem_out_1 & inst_mem_out_0;
+				counter(0) <= 0;
+				counter(1) <= 3;
+				counter(2) <= 2;
+				counter(3) <= 1;
 			else
 				if(pc >= 32767) then
 					pc <= 0;
 				end if;
-				insts(0) <= inst_mem_out_1 & inst_mem_out_0;
-				for j in 0 to 2 loop
-					insts(j+1) <= insts(j);
-				end loop;
+
 				for i in 0 to 3 loop
 					if(insts(i)(15 downto 10) = "000011")	then--add
 						case counter(i) is
@@ -109,7 +111,7 @@ begin
 							counter(i) <= counter(i) + 1;
 						when 3 =>
 							regs(to_integer(unsigned(insts(i)(8 downto 4)))) <= std_logic_vector(unsigned(dest_reg(i)(7 downto 0)) + to_integer(unsigned(src_reg(i))));
-							pc = pc + 1;
+							pc <= pc + 1;
 							counter(i) <= 0;
 						when others =>
 							counter(i) <= 0;
@@ -120,7 +122,7 @@ begin
 							reg_inst(i) <= adiw;
 							dest_reg(i)(7 downto 0) <= regs(to_integer(unsigned(24+unsigned(insts(i)(5 downto 4) & '0'))));
 							dest_reg(i)(15 downto 8) <= regs(to_integer(unsigned(24+unsigned(insts(i)(5 downto 4) & '1'))));
-							immidiate(i) <= insts(i)(7 downto 6) & insts(i)(3 downto 0);
+							immidiate(i) <= "00" & insts(i)(7 downto 6) & insts(i)(3 downto 0);
 							counter(i) <= counter(i) + 1;
 						when 1 =>
 							reg_16buf(i)<= std_logic_vector(unsigned(dest_reg(i)) + to_integer(unsigned(immidiate(i))));
@@ -130,7 +132,7 @@ begin
 						when 3 =>
 							regs(to_integer(unsigned(24+unsigned(insts(i)(5 downto 4) & '1')))) <= reg_16buf(i)(15 downto 8);
 							regs(to_integer(unsigned(24+unsigned(insts(i)(5 downto 4) & '0')))) <= reg_16buf(i)(7 downto 0);
-							pc = pc + 1;
+							pc <= pc + 1;
 							counter(i) <= 0;
 						when others =>
 							counter(i) <= 0;
@@ -148,7 +150,7 @@ begin
 							counter(i) <= counter(i) + 1;
 						when 3 =>
 							regs(to_integer(unsigned(insts(i)(8 downto 4)))) <= std_logic_vector(unsigned(dest_reg(i)(7 downto 0)) - to_integer(unsigned(src_reg(i))));
-							pc = pc + 1;
+							pc <= pc + 1;
 							counter(i) <= 0;
 						when others =>
 							counter(i) <= 0;
@@ -164,7 +166,7 @@ begin
 							counter(i) <= counter(i) + 1;
 						when 3 =>
 							regs(to_integer(unsigned(insts(i)(8 downto 4)))) <= std_logic_vector(X"FF" - unsigned(regs(to_integer(unsigned(insts(i)(8 downto 4))))));
-							pc = pc + 1;
+							pc <= pc + 1;
 							counter(i) <= 0;
 						when others =>
 							counter(i) <= 0;
@@ -184,7 +186,7 @@ begin
 						when 3 =>
 							regs(1) <= mult_out(15 downto 8);
 							regs(0) <= mult_out(7 downto 0);
-							pc = pc + 1;
+							pc <= pc + 1;
 							counter(i) <= 0;
 						when others =>
 							counter(i) <= 0;
@@ -200,7 +202,7 @@ begin
 							counter(i) <= counter(i) + 1;
 						when 3 =>
 							regs(to_integer(unsigned(insts(i)(7 downto 4)) + 16)) <= insts(i)(11 downto 8) & insts(i)(3 downto 0);
-							pc = pc + 1;
+							pc <= pc + 1;
 							counter(i) <= 0;
 						when others =>
 							counter(i) <= 0;
@@ -214,8 +216,9 @@ begin
 							counter(i) <= counter(i) + 1;
 						when 2 => 
 							counter(i) <= counter(i) + 1;
+							tmp0(i) <= insts(i)(11) & insts(i)(11)& insts(i)(11) & insts(i)(11) & insts(i)(11 downto 0);
 						when 3 =>
-							pc <= std_logic_vector(pc + signed(((insts(i)(11) & insts(i)(11)) & (insts(i)(11) & insts(i)(11)) & insts(i)(11 downto 0))));
+							pc <= to_integer(pc + signed(tmp0(i)));
 							counter(i) <= 0;
 						when others =>
 							counter(i) <= 0;
@@ -232,13 +235,19 @@ begin
 						when 2 => 
 							counter(i) <= counter(i) + 1;
 						when 3 =>
-							pc = pc + 1;
+							pc <= pc + 1;
 							counter(i) <= 0;
 						when others =>
 							counter(i) <= 0;
 						end case;
 					else
 							null;
+					end if;
+					if counter(i) = 3 then
+						insts(0) <= inst_mem_out_1 & inst_mem_out_0;
+						for j in 0 to 2 loop
+							insts(j+1) <= insts(j);
+						end loop;
 					end if;
 				end loop;
 			end if;
