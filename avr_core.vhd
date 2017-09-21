@@ -20,11 +20,11 @@ architecture logic of avr_core is
 									mov,ldi,lds,ld,ldd,sts,st,std0,lpm,in0,out0,push,pop,
 									lsl,lsr,rol0,ror0,asr,swap,bset,bclr,sbi,cbi,bst,bld,sec,clc,sen,cln,sez,clz,sei,cli,ses,cls,sev,clv,set,clt,seh,clh,nop,sleep,wdr);
 	--type inst_array is array(0 to 3) of instructs;
-	type reg_8bit_array is array (0 to 3) of std_logic_vector(7 downto 0);
-	type reg_16bit_array is array (0 to 3) of std_logic_vector(15 downto 0);
-	type c_array is array (0 to 3) of integer range 0 to 15;
-	type st is (fetch,execute);
-	type st_array is array (0 to 3) of st;
+	type reg_8bit_array is array (0 to 4) of std_logic_vector(7 downto 0);
+	type reg_16bit_array is array (0 to 4) of std_logic_vector(15 downto 0);
+	type c_array is array (0 to 4) of integer range 0 to 15;
+	type reg_st is (fetch,decode,execute);
+	type reg_st_array is array (0 to 4) of reg_st;
 	signal regs : regarray;
 	signal immidiate : reg_8bit_array;
 	signal reg_16buf : reg_16bit_array;
@@ -37,13 +37,13 @@ architecture logic of avr_core is
 	signal dest_reg : reg_16bit_array;
 	signal insts : reg_16bit_array;
 	signal reg_inst : instructs;
-	signal pipeline_counter : integer range 0 to 3;
 	signal counter : c_array;
 	signal tmp0,tmp1,tmp2,tmp3,tmp4 : reg_16bit_array;
 	signal inst_mem_addr_0,inst_mem_addr_1 : std_logic_vector(8 downto 0);
 	signal inst_mem_out_0,inst_mem_out_1 : std_logic_vector(7 downto 0);
-	signal rst_flg : std_logic_vector(3 downto 0);
-	signal state : st_array;
+	signal rst_flg : std_logic_vector(4 downto 0);
+	signal state : reg_st_array;
+	signal rst_counter : integer range 0 to 15;
 	component multiply is
 		PORT
 		(
@@ -83,33 +83,46 @@ begin
 			q_b => inst_mem_out_1
 		);
 			
-	inst_mem_addr_0 <= std_logic_vector(to_unsigned(pc,8)) & '0';
-	inst_mem_addr_1 <= std_logic_vector(to_unsigned(pc,8)) & '1';
+	
 	
 	
 	process (reset_n,clock) begin
 		if rising_edge(clock) then
 			if(reset_n = '0') then
 				pc <= 0;
-				for i in 0 to 3 loop
+				for i in 0 to 4 loop
 					insts(i) <= (others => '0');
 				end loop;
 				for i in 0 to 31 loop
 					regs(i) <= (others => '0');
 				end loop;
-				counter(0) <= 3;
-				counter(1) <= 2;
-				counter(2) <= 1;
-				counter(3) <= 0;
-				rst_flg <= "0000";
+				state(0) <= fetch;
+				state(1) <= decode;
+				state(2) <= execute;
+				state(3) <= execute;
+				state(4) <= execute;
+				counter(0) <= 0;
+				counter(1) <= 0;
+				counter(2) <= 0;
+				counter(3) <= 1;
+				counter(4) <= 2;
+				rst_counter <= 0;
 			else
 				if(pc >= 32767) then
 					pc <= 0;
 				end if;
-
-				for i in 0 to 3 loop
+				if(rst_counter <= 5) then
+					rst_counter <= rst_counter + 1;
+				end if;
+				for i in 0 to 4 loop
 					case state(i) is
 					when fetch =>
+						if(pc >= 6) then
+							inst_mem_addr_0 <= std_logic_vector(to_unsigned(pc-6,8)) & '0';
+							inst_mem_addr_1 <= std_logic_vector(to_unsigned(pc-6,8)) & '1';
+						end if;
+						state(i) <= decode;
+					when decode =>
 						insts(i) <= inst_mem_out_1 & inst_mem_out_0;
 						state(i) <= execute;
 					when execute =>
@@ -229,22 +242,33 @@ begin
 						elsif(insts(i) = "0000000000000000") then  --nop
 							case counter(i) is
 							when 0 =>
-								reg_inst <= nop;
 								counter(i) <= counter(i) + 1;
 							when 1 => 
 								counter(i) <= counter(i) + 1;
 							when 2 =>
-								if(rst_flg(i) = '0') then
-									rst_flg(i) <= '1';
-								else
+							--	if(rst_counter >= 9) then
 									pc <= pc + 1;
-								end if;
+							--	end if;
+								reg_inst <= nop;
 								counter(i) <= 0;
 							when others =>
 								counter(i) <= 0;
 							end case;
-						else
-								null;
+						else --nop
+							case counter(i) is
+							when 0 =>
+								counter(i) <= counter(i) + 1;
+							when 1 => 
+								counter(i) <= counter(i) + 1;
+							when 2 =>
+							--	if(rst_counter >= 5) then
+									pc <= pc + 1;
+							--	end if;
+								reg_inst <= nop;
+								counter(i) <= 0;
+							when others =>
+								counter(i) <= 0;
+							end case;
 						end if;
 						if counter(i) = 2 then
 							state(i) <= fetch;
