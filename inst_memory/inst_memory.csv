@@ -1,0 +1,21 @@
+# system info inst_memory on 2018.02.04.11:11:02
+system_info:
+name,value
+DEVICE,10M08SAE144C8GES
+DEVICE_FAMILY,MAX 10
+GENERATION_ID,1517710262
+#
+#
+# Files generated for inst_memory on 2018.02.04.11:11:02
+files:
+filepath,kind,attributes,module,is_top
+simulation/inst_memory.vhd,VHDL,,inst_memory,true
+simulation/submodules/altera_onchip_flash_util.v,VERILOG,,altera_onchip_flash,false
+simulation/submodules/altera_onchip_flash.v,VERILOG,,altera_onchip_flash,false
+simulation/submodules/altera_onchip_flash_avmm_data_controller.v,VERILOG,,altera_onchip_flash,false
+simulation/submodules/altera_onchip_flash_avmm_csr_controller.v,VERILOG,,altera_onchip_flash,false
+#
+# Map from instance-path to kind of module
+instances:
+instancePath,module
+inst_memory.onchip_flash_0,altera_onchip_flash

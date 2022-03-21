@@ -1,0 +1,18 @@
+Fitter Status : Failed - Sat Feb 17 12:09:25 2018
+Quartus Prime Version : 17.0.0 Build 595 04/25/2017 SJ Lite Edition
+Revision Name : avr_core
+Top-level Entity Name : avr_core
+Family : MAX 10
+Device : 10M08SAE144C8GES
+Timing Models : Preliminary
+Total logic elements : 3,932 / 8,064 ( 49 % )
+    Total combinational functions : 3,619 / 8,064 ( 45 % )
+    Dedicated logic registers : 975 / 8,064 ( 12 % )
+Total registers : 975
+Total pins : 34 / 101 ( 34 % )
+Total virtual pins : 0
+Total memory bits : 1,048,576 / 387,072 ( 271 % )
+Embedded Multiplier 9-bit elements : 1 / 48 ( 2 % )
+Total PLLs : 0 / 1 ( 0 % )
+UFM blocks : 0 / 1 ( 0 % )
+ADC blocks : 0 / 1 ( 0 % )

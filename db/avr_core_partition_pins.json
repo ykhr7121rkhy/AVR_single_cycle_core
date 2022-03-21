@@ -1,0 +1,145 @@
+{
+	"partitions" : [
+		{
+			"name" : "Top",
+			"pins" : [
+				{
+					"name" : "portA[0]",
+					"strict" : false
+				},
+				{
+					"name" : "portA[1]",
+					"strict" : false
+				},
+				{
+					"name" : "portA[2]",
+					"strict" : false
+				},
+				{
+					"name" : "portA[3]",
+					"strict" : false
+				},
+				{
+					"name" : "portA[4]",
+					"strict" : false
+				},
+				{
+					"name" : "portA[5]",
+					"strict" : false
+				},
+				{
+					"name" : "portA[6]",
+					"strict" : false
+				},
+				{
+					"name" : "portA[7]",
+					"strict" : false
+				},
+				{
+					"name" : "portB[0]",
+					"strict" : false
+				},
+				{
+					"name" : "portB[1]",
+					"strict" : false
+				},
+				{
+					"name" : "portB[2]",
+					"strict" : false
+				},
+				{
+					"name" : "portB[3]",
+					"strict" : false
+				},
+				{
+					"name" : "portB[4]",
+					"strict" : false
+				},
+				{
+					"name" : "portB[5]",
+					"strict" : false
+				},
+				{
+					"name" : "portB[6]",
+					"strict" : false
+				},
+				{
+					"name" : "portB[7]",
+					"strict" : false
+				},
+				{
+					"name" : "portC[0]",
+					"strict" : false
+				},
+				{
+					"name" : "portC[1]",
+					"strict" : false
+				},
+				{
+					"name" : "portC[2]",
+					"strict" : false
+				},
+				{
+					"name" : "portC[3]",
+					"strict" : false
+				},
+				{
+					"name" : "portC[4]",
+					"strict" : false
+				},
+				{
+					"name" : "portC[5]",
+					"strict" : false
+				},
+				{
+					"name" : "portC[6]",
+					"strict" : false
+				},
+				{
+					"name" : "portC[7]",
+					"strict" : false
+				},
+				{
+					"name" : "portD[0]",
+					"strict" : false
+				},
+				{
+					"name" : "portD[1]",
+					"strict" : false
+				},
+				{
+					"name" : "portD[2]",
+					"strict" : false
+				},
+				{
+					"name" : "portD[3]",
+					"strict" : false
+				},
+				{
+					"name" : "portD[4]",
+					"strict" : false
+				},
+				{
+					"name" : "portD[5]",
+					"strict" : false
+				},
+				{
+					"name" : "portD[6]",
+					"strict" : false
+				},
+				{
+					"name" : "portD[7]",
+					"strict" : false
+				},
+				{
+					"name" : "clock",
+					"strict" : false
+				},
+				{
+					"name" : "reset_n",
+					"strict" : false
+				}
+			]
+		}
+	]
+}

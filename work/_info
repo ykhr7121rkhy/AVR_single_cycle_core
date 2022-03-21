@@ -1,0 +1,213 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+dC:/intelFPGA_lite/17.0
+Eavr_core
+Z0 w1607789659
+Z1 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
+Z2 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z3 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
+Z4 dD:/Tools_works/FPGA/avr_core
+Z5 8D:/Tools_works/FPGA/avr_core/avr_core.vhd
+Z6 FD:/Tools_works/FPGA/avr_core/avr_core.vhd
+l0
+L8
+V>4amCie7>MDjJk_iKiEdS2
+!s100 2[CPLR54=1aSf`UBE_oO30
+Z7 OV;C;10.5b;63
+32
+Z8 !s110 1607789663
+!i10b 1
+Z9 !s108 1607789663.000000
+Z10 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/Tools_works/FPGA/avr_core/avr_core.vhd|
+Z11 !s107 D:/Tools_works/FPGA/avr_core/avr_core.vhd|
+!i113 1
+Z12 o-work work -2002 -explicit
+Z13 tExplicit 1 CvgOpt 0
+Alogic
+R1
+R2
+R3
+Z14 DEx4 work 8 avr_core 0 22 >4amCie7>MDjJk_iKiEdS2
+l132
+L21
+V^dBS1OY7zRQUI_0k4:dl42
+!s100 [DR[z[KZkj[lGFiK?WY6Y2
+R7
+32
+R8
+!i10b 1
+R9
+R10
+R11
+!i113 1
+R12
+R13
+Eavr_core_sim
+Z15 w1517629546
+R1
+R2
+R3
+R4
+Z16 8C:/intelFPGA_lite/17.0/avr_core/avr_core_sim.vhd
+Z17 FC:/intelFPGA_lite/17.0/avr_core/avr_core_sim.vhd
+l0
+L7
+Vm8n@Sz:YWN_W=FNZWDE`<2
+!s100 o8S]MlRBKfhezkZFCWO8J2
+R7
+32
+R8
+!i10b 1
+R9
+Z18 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/intelFPGA_lite/17.0/avr_core/avr_core_sim.vhd|
+Z19 !s107 C:/intelFPGA_lite/17.0/avr_core/avr_core_sim.vhd|
+!i113 1
+R12
+R13
+Asim
+R1
+R2
+R3
+DEx4 work 12 avr_core_sim 0 22 m8n@Sz:YWN_W=FNZWDE`<2
+l25
+L10
+VFejm0HdAgI5J3YF0dlO8e3
+!s100 YB6O:HZXYf=jBBcz9i6HX1
+R7
+32
+R8
+!i10b 1
+R9
+R18
+R19
+!i113 1
+R12
+R13
+Einst_mem
+Z20 w1517844248
+Z21 DPx9 altera_mf 20 altera_mf_components 0 22 :YRc5<ojH^WgP]^Vezi9c1
+R2
+R3
+R4
+Z22 8C:/intelFPGA_lite/17.0/avr_core/inst_mem.vhd
+Z23 FC:/intelFPGA_lite/17.0/avr_core/inst_mem.vhd
+l0
+L43
+V__<jNPGoYPYiRcOg7km:d0
+!s100 6?2^GP5:oTCLE9P2bAEND0
+R7
+32
+Z24 !s110 1607789662
+!i10b 1
+Z25 !s108 1607789662.000000
+Z26 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/intelFPGA_lite/17.0/avr_core/inst_mem.vhd|
+Z27 !s107 C:/intelFPGA_lite/17.0/avr_core/inst_mem.vhd|
+!i113 1
+R12
+R13
+Asyn
+R21
+R2
+R3
+DEx4 work 8 inst_mem 0 22 __<jNPGoYPYiRcOg7km:d0
+l63
+L55
+VIXVc@6z1Azjf=J^CVJ3OQ2
+!s100 P3fQUokP0db@2Uz7>Lo^h0
+R7
+32
+R24
+!i10b 1
+R25
+R26
+R27
+!i113 1
+R12
+R13
+Emultiply
+R15
+R2
+R3
+R4
+Z28 8C:/intelFPGA_lite/17.0/avr_core/multiply.vhd
+Z29 FC:/intelFPGA_lite/17.0/avr_core/multiply.vhd
+l0
+L43
+VWMdaHf>[<jFk;:YZF5aeZ2
+!s100 33Q?ORRHC<0IG>07H;WzV2
+R7
+32
+R24
+!i10b 1
+R25
+Z30 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/intelFPGA_lite/17.0/avr_core/multiply.vhd|
+Z31 !s107 C:/intelFPGA_lite/17.0/avr_core/multiply.vhd|
+!i113 1
+R12
+R13
+Asyn
+R2
+R3
+DEx4 work 8 multiply 0 22 WMdaHf>[<jFk;:YZF5aeZ2
+l78
+L54
+V[iNDa^5;keCe[Ucf]jBAL0
+!s100 NGM^Wfk=KdJf7Q=?lYS]M1
+R7
+32
+R24
+!i10b 1
+R25
+R30
+R31
+!i113 1
+R12
+R13
+Eram0
+Z32 w1517917849
+R21
+R2
+R3
+R4
+Z33 8C:/intelFPGA_lite/17.0/avr_core/ram0.vhd
+Z34 FC:/intelFPGA_lite/17.0/avr_core/ram0.vhd
+l0
+L43
+VCMn>R1^0id7]_@heXQC3M0
+!s100 12U8N?5DA@R<jG1>65B312
+R7
+32
+R24
+!i10b 1
+R25
+Z35 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/intelFPGA_lite/17.0/avr_core/ram0.vhd|
+Z36 !s107 C:/intelFPGA_lite/17.0/avr_core/ram0.vhd|
+!i113 1
+R12
+R13
+Asyn
+R21
+R2
+R3
+DEx4 work 4 ram0 0 22 CMn>R1^0id7]_@heXQC3M0
+l64
+L59
+VXcX?W;QmKaoXU4iKa?mOP0
+!s100 fnl0OPW>d_U7_1W@cnJ^C2
+R7
+32
+R24
+!i10b 1
+R25
+R35
+R36
+!i113 1
+R12
+R13

@@ -1,0 +1,80 @@
+C:/intelFPGA_lite/17.0/avr_core/avr_core_sim.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/intelFPGA_lite/17.0/avr_core/avr_core_sim.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity avr_core_sim
+-- Compiling architecture sim of avr_core_sim
+
+} {} {}} D:/Tools_works/FPGA/avr_core/avr_core.vhd {1 {vcom -work work -2002 -explicit -stats=none D:/Tools_works/FPGA/avr_core/avr_core.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity avr_core
+-- Compiling architecture logic of avr_core
+
+} {} {}} C:/intelFPGA/17.0/avr_core/multiply.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/intelFPGA/17.0/avr_core/multiply.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity multiply
+-- Compiling architecture SYN of multiply
+
+} {} {}} C:/intelFPGA/17.0/avr_core/inst_mem.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/intelFPGA/17.0/avr_core/inst_mem.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package altera_mf_components
+-- Compiling entity inst_mem
+-- Compiling architecture SYN of inst_mem
+
+} {} {}} C:/intelFPGA_lite/17.0/avr_core/ram0.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/intelFPGA_lite/17.0/avr_core/ram0.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package altera_mf_components
+-- Compiling entity ram0
+-- Compiling architecture SYN of ram0
+
+} {} {}} C:/intelFPGA_lite/17.0/avr_core/inst_mem.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/intelFPGA_lite/17.0/avr_core/inst_mem.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package altera_mf_components
+-- Compiling entity inst_mem
+-- Compiling architecture SYN of inst_mem
+
+} {} {}} C:/intelFPGA_lite/17.0/avr_core/multiply.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/intelFPGA_lite/17.0/avr_core/multiply.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity multiply
+-- Compiling architecture SYN of multiply
+
+} {} {}} C:/intelFPGA/17.0/avr_core/avr_core.vhd {1 {vcom -work work -2002 -explicit -stats=none {C:\intelFPGA\17.0\avr_core\avr_core.vhd}
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity avr_core
+-- Compiling architecture logic of avr_core
+
+} {} {}} C:/intelFPGA/17.0/avr_core/avr_core_sim.vhd {1 {vcom -work work -2002 -explicit -stats=none {C:\intelFPGA\17.0\avr_core\avr_core_sim.vhd}
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity avr_core_sim
+-- Compiling architecture sim of avr_core_sim
+
+} {} {}}

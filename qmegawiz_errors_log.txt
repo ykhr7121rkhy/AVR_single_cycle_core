@@ -1,0 +1,13 @@
+
+
+C:/intelFPGA_lite/17.0/avr_core/inst_mem.v
+
+Feb 06 12AM:23:06>: The following design file, which has identical name but a different extension 
+from the specified variation file, already exists in the working directory:
+
+inst_mem.vhd
+
+This may create a conflict of design files and/or lead to undesirable side
+effects.
+
+Is it OK to continue file generation?

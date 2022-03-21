@@ -1,0 +1,63 @@
+Info: Starting: Create simulation model
+Info: qsys-generate C:\intelFPGA_lite\17.0\avr_core\inst_memory.qsys --simulation=VHDL --allow-mixed-language-simulation --output-directory=C:\intelFPGA_lite\17.0\avr_core\inst_memory\simulation --family="MAX 10" --part=10M08SAE144C8GES
+Progress: Loading avr_core/inst_memory.qsys
+Progress: Reading input file
+Progress: Adding onchip_flash_0 [altera_onchip_flash 17.0]
+Progress: Parameterizing module onchip_flash_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: inst_memory: Generating inst_memory "inst_memory" for SIM_VHDL
+Info: onchip_flash_0: "inst_memory" instantiated altera_onchip_flash "onchip_flash_0"
+Info: inst_memory: Done "inst_memory" with 2 modules, 5 files
+Info: qsys-generate succeeded.
+Info: Finished: Create simulation model
+Info: Starting: Create Modelsim Project.
+Info: sim-script-gen --spd=C:\intelFPGA_lite\17.0\avr_core\inst_memory\inst_memory.spd --output-directory=C:/intelFPGA_lite/17.0/avr_core/inst_memory/simulation/ --use-relative-paths=true
+Info: Doing: ip-make-simscript --spd=C:\intelFPGA_lite\17.0\avr_core\inst_memory\inst_memory.spd --output-directory=C:/intelFPGA_lite/17.0/avr_core/inst_memory/simulation/ --use-relative-paths=true
+Info: Generating the following file(s) for MODELSIM simulator in C:/intelFPGA_lite/17.0/avr_core/inst_memory/simulation/ directory:
+Info: 	mentor/msim_setup.tcl
+Info: Skipping VCS script generation since VHDL file $QUARTUS_INSTALL_DIR/eda/sim_lib/altera_syn_attributes.vhd is required for simulation
+Info: Generating the following file(s) for VCSMX simulator in C:/intelFPGA_lite/17.0/avr_core/inst_memory/simulation/ directory:
+Info: 	synopsys/vcsmx/synopsys_sim.setup
+Info: 	synopsys/vcsmx/vcsmx_setup.sh
+Info: Generating the following file(s) for NCSIM simulator in C:/intelFPGA_lite/17.0/avr_core/inst_memory/simulation/ directory:
+Info: 	cadence/cds.lib
+Info: 	cadence/hdl.var
+Info: 	cadence/ncsim_setup.sh
+Info: 	1 .cds.lib files in cadence/cds_libs/ directory
+Info: Generating the following file(s) for RIVIERA simulator in C:/intelFPGA_lite/17.0/avr_core/inst_memory/simulation/ directory:
+Info: 	aldec/rivierapro_setup.tcl
+Info: For information on how to simulate your IP, see the explanatory comments in the simulator-specific subdirectories under C:/intelFPGA_lite/17.0/avr_core/inst_memory/simulation/.
+Info: Regenerate these scripts whenever you make any change to any Quartus-generated IP in your project.
+Info: Finished: Create Modelsim Project.
+Info: Starting: Create block symbol file (.bsf)
+Info: qsys-generate C:\intelFPGA_lite\17.0\avr_core\inst_memory.qsys --block-symbol-file --output-directory=C:\intelFPGA_lite\17.0\avr_core\inst_memory --family="MAX 10" --part=10M08SAE144C8GES
+Progress: Loading avr_core/inst_memory.qsys
+Progress: Reading input file
+Progress: Adding onchip_flash_0 [altera_onchip_flash 17.0]
+Progress: Parameterizing module onchip_flash_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: qsys-generate succeeded.
+Info: Finished: Create block symbol file (.bsf)
+Info: 
+Info: Starting: Create HDL design files for synthesis
+Info: qsys-generate C:\intelFPGA_lite\17.0\avr_core\inst_memory.qsys --synthesis=VHDL --output-directory=C:\intelFPGA_lite\17.0\avr_core\inst_memory\synthesis --family="MAX 10" --part=10M08SAE144C8GES
+Progress: Loading avr_core/inst_memory.qsys
+Progress: Reading input file
+Progress: Adding onchip_flash_0 [altera_onchip_flash 17.0]
+Progress: Parameterizing module onchip_flash_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: inst_memory: Generating inst_memory "inst_memory" for QUARTUS_SYNTH
+Info: onchip_flash_0: Generating top-level entity altera_onchip_flash
+Info: onchip_flash_0: "inst_memory" instantiated altera_onchip_flash "onchip_flash_0"
+Info: inst_memory: Done "inst_memory" with 2 modules, 7 files
+Info: qsys-generate succeeded.
+Info: Finished: Create HDL design files for synthesis
